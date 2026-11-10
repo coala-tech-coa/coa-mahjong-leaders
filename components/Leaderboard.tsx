@@ -15,6 +15,7 @@ import type { ActionResult, Player } from "@/lib/types";
 import { usePin } from "@/lib/usePin";
 import PinModal from "./PinModal";
 import AddPlayerDialog from "./AddPlayerDialog";
+import ConfirmModal from "./ConfirmModal";
 
 
 type Op =
@@ -74,6 +75,13 @@ export default function Leaderboard({
     const [showPin, setShowPin] = useState(false);
     const [showAdd, setShowAdd] = useState(false);
     const [toast, setToast] = useState<string | null>(null);
+    const [confirm, setConfirm] = useState<{
+        message: string;
+        confirmLabel: string;
+        danger?: boolean;
+        onConfirm: () => void;
+    } | null>(null);
+
     const pendingRef = useRef<((pin: string) => void) | null>(null);
 
     const [optimisticPlayers, applyOptimistic] = useOptimistic(players, reducer);
@@ -115,6 +123,23 @@ export default function Leaderboard({
             clear();
             setShowPin(true);
         }
+    }
+
+    function requestChange(name: string, delta: 1 | -1) {
+        setConfirm({
+            message: delta === 1 ? `Add a win to ${name}?` : `Remove a win from ${name}?`,
+            confirmLabel: delta === 1 ? "Yes, add" : "Yes, remove",
+            danger: delta === -1,
+            onConfirm: () => changeScore(name, delta),
+        });
+    }
+
+    function requestAdd(name: string, wins: number) {
+        setConfirm({
+            message: `Add ${name} to the board with ${wins} ${wins === 1 ? "win" : "wins"}?`,
+            confirmLabel: "Yes, add player",
+            onConfirm: () => addPlayer(name, wins),
+        });
     }
 
     function changeScore(name: string, delta: 1 | -1) {
@@ -182,7 +207,7 @@ export default function Leaderboard({
 
                         <div className="flex items-center gap-1">
                             <button
-                                onClick={() => changeScore(p.name, -1)}
+                                onClick={() => requestChange(p.name, -1)}
                                 disabled={p.wins <= 0}
                                 aria-label={`Remove a win from ${p.name}`}
                                 className="flex h-11 w-11 items-center justify-center rounded-lg bg-red-200 text-red-800 active:scale-90 disabled:opacity-30"
@@ -195,7 +220,7 @@ export default function Leaderboard({
                             </span>
 
                             <button
-                                onClick={() => changeScore(p.name, 1)}
+                                onClick={() => requestChange(p.name, 1)}
                                 aria-label={`Add a win to ${p.name}`}
                                 className="flex h-11 w-11 items-center justify-center rounded-lg bg-emerald-700 text-white active:scale-90"
                             >
@@ -240,8 +265,22 @@ export default function Leaderboard({
             {showAdd && (
                 <AddPlayerDialog
                     existingNames={optimisticPlayers.map((p) => p.name)}
-                    onSubmit={addPlayer}
+                    onSubmit={requestAdd}
                     onClose={() => setShowAdd(false)}
+                />
+            )}
+
+            {confirm && (
+                <ConfirmModal 
+                    message={confirm.message}
+                    confirmLabel={confirm.confirmLabel}
+                    danger={confirm.danger}
+                    onClose={() => setConfirm(null)}
+                    onConfirm={() => {
+                        const run = confirm.onConfirm;
+                        setConfirm(null);
+                        run();
+                    }}
                 />
             )}
 
