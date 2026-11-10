@@ -1,33 +1,50 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useSyncExternalStore } from "react";
 
 const KEY = "coalachinesetongits"
 
+const listeners = new Set<() => void>();
+
+function subscribe(cb: () => void) {
+    listeners.add(cb);
+    window.addEventListener("storage", cb);
+    return () => {
+        listeners.delete(cb);
+        window.removeEventListener("storage", cb);
+    };
+}
+
+function getSnapshot(): string | null {
+    try {
+        return localStorage.getItem(KEY);
+    } catch {
+        return null;
+    }
+}
+
+const getServerSnapshot = () => null;
+
+function notify() {
+    listeners.forEach((cb) => cb());
+}
+
 export function usePin() {
 
-    const [pin, setPin] = useState<string | null>(null);
-
-    useEffect(() => {
-        try {
-            setPin(localStorage.getItem(KEY));
-        } catch {
-
-        }
-    }, []);
+    const pin = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
 
     const save = useCallback((value: string) => {
         try {
             localStorage.setItem(KEY, value);
         } catch {}
-        setPin(value);
+        notify();
     }, []);
 
     const clear = useCallback(() => {
         try {
             localStorage.removeItem(KEY);
         } catch {}
-        setPin(null);
+        notify();
     }, []);
 
     return { pin, save, clear };

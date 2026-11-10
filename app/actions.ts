@@ -10,7 +10,7 @@ const sortPlayers = (list: Player[]) =>
 
 function pinOk(pin: unknown): boolean {
     const expected = process.env.ORG_PIN;
-    return !!expected && typeof pin === "string" && pin == expected;
+    return !!expected && typeof pin === "string" && pin === expected;
 }
 
 const BAD_PIN: ActionResult = {
