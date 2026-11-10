@@ -38,11 +38,11 @@ export default function AddPlayerDialog({ existingNames, onSubmit, onClose }: Pr
             <form
                 onSubmit={submit}
                 onClick={(e) => e.stopPropagation()}
-                className="w-full max-w-sm rounded-2xl bg-[#f6f1e3] p-5 text-stone-900 shadow-xl"              
+                className="w-full max-w-sm rounded-2xl border-[6px] border-felt bg-paper p-5 text-stone-900 shadow-xl"              
             >
                 <div className="mb-3 flex items-center gap-2">
                     <UserPlus className="h-5 w-5" />
-                    <h2 className="text-lg font-bold">Add a New Player</h2>
+                    <h2 className="font-display text-2xl">Add a New Player</h2>
                 </div>
 
                 <label className="mb-1 block text-sm font-medium">Name</label>
@@ -51,7 +51,7 @@ export default function AddPlayerDialog({ existingNames, onSubmit, onClose }: Pr
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                     maxLength={30}
-                    className="mb-3 w-full rounded-lg border border-stone-300 bg-white px-3 py-3 text-base outline-none focus:ring-2 focus:ring-emerald-600"
+                    className="mb-3 w-full rounded-lg border border-stone-300 bg-white px-3 py-3 text-base outline-none focus:ring-2 focus:ring-felt"
                     placeholder="e.g. Coala / Coala Pogi"
                 />
 
@@ -62,7 +62,7 @@ export default function AddPlayerDialog({ existingNames, onSubmit, onClose }: Pr
                     max={99}
                     value={wins}
                     onChange={(e) => setWins(Number(e.target.value))}
-                    className="w-full rounded-lg border border-stone-300 bg-white px-3 py-3 text-base outline-none focus:ring-2 focus:ring-emerald-600"
+                    className="w-full rounded-lg border border-stone-300 bg-white px-3 py-3 text-base outline-none focus:ring-2 focus:ring-felt"
                 />
 
                 {error && <p className="mt-2 text-sm text-red-700">{error}</p>}
@@ -77,7 +77,7 @@ export default function AddPlayerDialog({ existingNames, onSubmit, onClose }: Pr
                     </button>
                     <button
                         type="submit"
-                        className="flex-1 rounded-lg bg-emerald-700 px-4 py-3 font-semibold text-white"
+                        className="flex-1 rounded-lg bg-felt px-4 py-3 font-semibold text-white"
                     >
                         Add player
                     </button>

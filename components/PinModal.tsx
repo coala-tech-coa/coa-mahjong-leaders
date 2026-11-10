@@ -35,11 +35,11 @@ export default function PinModal({ onUnlocked, onClose }: Props) {
             <form
                 onSubmit={submit}
                 onClick={(e) => e.stopPropagation()}
-                className="w-full max-w-sm rounded-2xl bg-[#f6f1e3] p-5 text-stone-900 shadow-xl"
+                className="w-full max-w-sm rounded-2xl border-[6px] border-felt bg-paper p-5 text-stone-900 shadow-xl"
             >
                 <div className="mb-3 flex items-center gap-2">
                     <Lock className="h-5 w-5" />
-                    <h2 className="text-lg font-bold">Enter the org room PIN</h2>
+                    <h2 className="font-display text-2xl">Enter the org room PIN</h2>
                 </div>
 
                 <p>
@@ -53,7 +53,7 @@ export default function PinModal({ onUnlocked, onClose }: Props) {
                     autoComplete="off"
                     value={value}
                     onChange={(e) => setValue(e.target.value)}
-                    className="w-full rounded-lg border border-stone-300 bg-white px-3 py-3 text-base outline-none focus:ring-2 focus:ring-emerald-600"
+                    className="w-full rounded-lg border border-stone-300 bg-white px-3 py-3 text-base outline-none focus:ring-2 focus:ring-felt"
                     placeholder="PIN"
                 />
                 {error && <p className="mt-2 text-sm text-red-700">{error}</p>}
@@ -68,7 +68,7 @@ export default function PinModal({ onUnlocked, onClose }: Props) {
                     <button
                         type="submit"
                         disabled={pending || !value.trim()}
-                        className="flex-1 rounded-lg bg-emerald-700 px-4 py-3 font-semibold text-white disabled:opacity-50"
+                        className="flex-1 rounded-lg bg-felt px-4 py-3 font-semibold text-white disabled:opacity-50"
                     >
                         {pending ? "Checking..." : "Unlock"}
                     </button>

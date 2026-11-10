@@ -44,10 +44,19 @@ function rankPlayers(list: Player[]): Ranked[] {
 }
 
 const BADGE: Record<number, string> = {
-    1: "bg-yellow-400 text-yellow-950 ring-yellow-600",
-    2: "bg-slate-300 text-slate-900 ring-slate-500",
-    3: "bg-amber-600 text-amber-50 ring-amber-800",
+    1: "bg-gold text-yellow-950",
+    2: "bg-silver text-slate-900",
+    3: "bg-bronze text-white",
 };
+
+const CARD: Record<number, string> = {
+    1: "border-[9px] border-gold",
+    2: "border-[9px] border-silver-edge",
+    3: "border-[9px] border-bronze",
+};
+
+const CARD_DEFAULT = "border-b-4 border-stone-400 px-[calc(0.75rem+9px)]";
+const BADGE_DEFAULT = "bg-stone-200 text-stone-700 ring-2 ring-stone-300"
 
 
 export default function Leaderboard({
@@ -87,7 +96,7 @@ export default function Leaderboard({
 
     const visible = useMemo(() => {
         const q = query.trim().toLowerCase();
-        return q ? ranked.filter((p) => p.name.toLowerCase().includes(q)): ranked;
+        return q ? ranked.filter((p) => p.name.toLowerCase().includes(q)) : ranked;
     }, [ranked, query]);
 
     function withPin(run: (pin: string) => void) {
@@ -129,7 +138,7 @@ export default function Leaderboard({
 
     return (
         <section>
-            {usingFallback &&(
+            {usingFallback && (
                 <div className="mb-4 rounded-lg bg-amber-100 px-3 py-2 text-sm text-amber-900">
                     Showing offline whiteboard data. Score changes won&apos;t be saved until the sheet is connected.
                 </div>
@@ -142,12 +151,12 @@ export default function Leaderboard({
                         value={query}
                         onChange={(e) => setQuery(e.target.value)}
                         placeholder="Search players"
-                        className="w-full rounded-xl bg-[#f6f1e3] py-3 pl-9 pr-3 text-base text-stone-900 outline-none focus:ring-2 focus:ring-yellow-400"
+                        className="w-full rounded-xl bg-paper py-3 pl-9 pr-3 text-base text-stone-900 outline-none focus:ring-2 focus:ring-gold"
                     />
                 </div>
                 <button
                     onClick={() => setShowAdd(true)}
-                    className="flex items-center gap-1.5 rounded-xl bg-yellow-400 px-4 font-semibold text-yellow-950 active:scale-95"
+                    className="flex items-center gap-1.5 rounded-xl bg-gold px-4 font-semibold text-yellow-950 active:scale-95"
                 >
                     <UserPlus className="h-5 w-5" />
                     <span className="hidden sm:inline">Add</span>
@@ -158,30 +167,30 @@ export default function Leaderboard({
                 {visible.map((p) => (
                     <li
                         key={p.name}
-                        className="flex items-center gap-3 rounded-xl border-b-4 border-stone-400 bg-[#f6f1e3] px-3 py-2.5 text-stone-900 shadow"
+                        className={`flex items-center gap-3 rounded-2xl bg-paper px-3 py-2.5 text-stone-900 shadow ${CARD[p.rank] ?? CARD_DEFAULT
+                            }`}
                     >
                         <span
-                            className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-sm font-bold ring-2 ${
-                                BADGE[p.rank] ?? "bg-stone-200 text-stone-700 ring-stone-300"
-                            }`}
+                            className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-full text-lg font-bold ${BADGE[p.rank] ?? BADGE_DEFAULT
+                                }`}
                             aria-label={`Rank ${p.rank}`}
                         >
                             {p.rank}
                         </span>
 
-                        <span className="min-w-0 flex-1 truncate text-lg font-semibold">{p.name}</span>
+                        <span className="min-w-0 flex-1 truncate font-display text-2xl">{p.name}</span>
 
                         <div className="flex items-center gap-1">
                             <button
                                 onClick={() => changeScore(p.name, -1)}
                                 disabled={p.wins <= 0}
                                 aria-label={`Remove a win from ${p.name}`}
-                                className="flex h-11 w-11 items-center justify-center rounded-lg bg-stone-200 active:scale-90 disabled:opacity-30"
+                                className="flex h-11 w-11 items-center justify-center rounded-lg bg-red-200 text-red-800 active:scale-90 disabled:opacity-30"
                             >
                                 <Minus className="h-5 w-5" />
                             </button>
 
-                            <span className="w-10 text-center text-2xl font-extrabold tabular-nums">
+                            <span className="w-10 text-center font-display text-2xl tabular-nums">
                                 {p.wins}
                             </span>
 
@@ -213,7 +222,7 @@ export default function Leaderboard({
             )}
 
             {showPin && (
-                <PinModal 
+                <PinModal
                     onClose={() => {
                         pendingRef.current = null;
                         setShowPin(false);
@@ -229,7 +238,7 @@ export default function Leaderboard({
             )}
 
             {showAdd && (
-                <AddPlayerDialog 
+                <AddPlayerDialog
                     existingNames={optimisticPlayers.map((p) => p.name)}
                     onSubmit={addPlayer}
                     onClose={() => setShowAdd(false)}

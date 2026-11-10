@@ -1,8 +1,20 @@
 @import "tailwindcss";
 
+@theme inline {
+  --font-display: var(--font-momo-display), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-momo-sans), ui-sans-serif, system-ui, sans-serif;
+
+  --color-felt: #0e3d30;
+  --color-mint: #b9fbc0;
+  --color-paper: #f6f1e3;
+  --color-gold: #ffc800;
+  --color-silver: #cbd5e1;
+  --color-silver-edge: #94a3b8;
+  --color-bronze: #e07000;
+}
+
 body {
-  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-  background-color: #0b3d2e;
+  background-color: var(--color-felt);
   background-image: 
     radial-gradient(ellipse at top, rgba(255, 255, 255, 0.08), transparent 60%),
     repeating-linear-gradient(45deg, rgba(0, 0, 0, 0.05) 0 2px, transparent 2px 4px)
