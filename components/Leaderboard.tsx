@@ -51,13 +51,13 @@ const BADGE: Record<number, string> = {
 };
 
 const CARD: Record<number, string> = {
-    1: "border-[9px] border-gold",
-    2: "border-[9px] border-silver-edge",
-    3: "border-[9px] border-bronze",
+    1: "border-[5px] border-gold",
+    2: "border-[5px] border-silver-edge",
+    3: "border-[5px] border-bronze",
 };
 
-const CARD_DEFAULT = "border-b-4 border-stone-400 px-[calc(0.75rem+9px)]";
-const BADGE_DEFAULT = "bg-stone-200 text-stone-700 ring-2 ring-stone-300"
+const CARD_DEFAULT = "border-b-2 border-stone-400 px-[calc(0.625rem+5px)]";
+const BADGE_DEFAULT = "bg-stone-200 text-stone-700 ring-1 ring-stone-300";
 
 
 export default function Leaderboard({
@@ -169,14 +169,14 @@ export default function Leaderboard({
                 </div>
             )}
 
-            <div className="mb-4 flex gap-2">
+            <div className="mb-3 flex gap-2">
                 <div className="relative flex-1">
                     <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-stone-500" />
                     <input
                         value={query}
                         onChange={(e) => setQuery(e.target.value)}
                         placeholder="Search players"
-                        className="w-full rounded-xl bg-paper py-3 pl-9 pr-3 text-base text-stone-900 outline-none focus:ring-2 focus:ring-gold"
+                        className="w-full rounded-xl bg-paper py-2 pl-9 pr-3 text-sm text-stone-900 outline-none focus:ring-2 focus:ring-gold"
                     />
                 </div>
                 <button
@@ -188,43 +188,45 @@ export default function Leaderboard({
                 </button>
             </div>
 
-            <ul className="space-y-2">
+            <ul className="space-y-1.5">
                 {visible.map((p) => (
                     <li
                         key={p.name}
-                        className={`flex items-center gap-3 rounded-2xl bg-paper px-3 py-2.5 text-stone-900 shadow ${CARD[p.rank] ?? CARD_DEFAULT
-                            }`}
+                        className={`flex items-center gap-2.5 rounded-xl bg-paper px-2.5 py-1.5 text-stone-900 shadow-sm ${
+                            CARD[p.rank] ?? CARD_DEFAULT
+                        }`}
                     >
                         <span
-                            className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-full text-lg font-bold ${BADGE[p.rank] ?? BADGE_DEFAULT
-                                }`}
+                            className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-sm font-bold ${
+                                BADGE[p.rank] ?? BADGE_DEFAULT
+                            }`}
                             aria-label={`Rank ${p.rank}`}
                         >
                             {p.rank}
                         </span>
 
-                        <span className="min-w-0 flex-1 truncate font-display text-2xl">{p.name}</span>
+                        <span className="min-w-0 flex-1 truncate font-display text-lg">{p.name}</span>
 
                         <div className="flex items-center gap-1">
                             <button
                                 onClick={() => requestChange(p.name, -1)}
                                 disabled={p.wins <= 0}
                                 aria-label={`Remove a win from ${p.name}`}
-                                className="flex h-11 w-11 items-center justify-center rounded-lg bg-red-200 text-red-800 active:scale-90 disabled:opacity-30"
+                                className="flex h-8 w-8 items-center justify-center rounded-md bg-red-200 text-red-800 active:scale-90 disabled:opacity-30"
                             >
-                                <Minus className="h-5 w-5" />
+                                <Minus className="h-4 w-4" />
                             </button>
 
-                            <span className="w-10 text-center font-display text-2xl tabular-nums">
+                            <span className="w-8 text-center font-display text-lg tabular-nums">
                                 {p.wins}
                             </span>
 
                             <button
                                 onClick={() => requestChange(p.name, 1)}
                                 aria-label={`Add a win to ${p.name}`}
-                                className="flex h-11 w-11 items-center justify-center rounded-lg bg-emerald-700 text-white active:scale-90"
+                                className="flex h-8 w-8 items-center justify-center rounded-md bg-emerald-700 text-white active:scale-90"
                             >
-                                <Plus className="h-5 w-5" />
+                                <Plus className="h-4 w-4" />
                             </button>
                         </div>
                     </li>
